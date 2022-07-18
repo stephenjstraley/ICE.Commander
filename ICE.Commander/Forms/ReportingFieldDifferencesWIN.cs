@@ -58,9 +58,9 @@ namespace ICE.Commander
             Cursor.Current = Cursors.WaitCursor;
             prodFields = GetCanonicalFieldsByInstance("Production");
             //devFields = GetCanonicalFieldsByInstance("Development");
-            qaFields = GetCanonicalFieldsByInstance("QA");
-            uatFields = GetCanonicalFieldsByInstance("UAT");
-            tpoQaFields = GetCanonicalFieldsByInstance("TPO-QA");
+            qaFields = GetCanonicalFieldsByInstance(MainWindow.defaultEnvironment);
+            //uatFields = GetCanonicalFieldsByInstance("UAT");
+            //tpoQaFields = GetCanonicalFieldsByInstance("TPO-QA");
 
             //PopulateDevDifferences();
             PopulateQaDiffernces();

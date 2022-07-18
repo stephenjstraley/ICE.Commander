@@ -13,6 +13,8 @@ namespace ICE.Commander
 {
     public partial class MainWindow : Form
     {
+        public static string defaultEnvironment = "E2Test";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -234,6 +236,24 @@ namespace ICE.Commander
             {
                 win.ShowDialog();
             }
+        }
+
+        private void allFieldValuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (System.Windows.Forms.Form win = new FieldComparerWIN())
+            {
+                win.ShowDialog();
+            }
+        }
+
+        private void aPIFieldSchemaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Form win = new FieldSchemaWIN())
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                win.ShowDialog();
+            }
+            Cursor.Current = Cursors.Default;
         }
     }
 }

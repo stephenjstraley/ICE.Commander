@@ -68,7 +68,7 @@ namespace ICE.Commander
                 {
                     //loan._guid = _guid;
 
-                    defReturn = Task.Run(() => loan.GetFullLoanAsync(_guid)).Result;
+                    defReturn = Task.Run(() => loan.LoadLoanAsync(_guid)).Result;
 
                     if (defReturn)
                         _loan = loan;

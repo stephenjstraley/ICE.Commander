@@ -17,6 +17,8 @@ namespace ICE.Commander
         protected ListView.ListViewItemCollection _items;
         protected List<string> _editValues = new List<string>();
         protected string _currentTermName = "";
+        protected string _AssemblyBase = "ICE.SDKtoAPI";
+
         public AddTermWIN(List<string> queryFields, ListView.ListViewItemCollection items)
         {
             _queryFields = queryFields;
@@ -41,22 +43,22 @@ namespace ICE.Commander
 
         private void AddTermWIN_Load(object sender, EventArgs e)
         {
-            var typeObj = Assembly.Load("STAR.Encompass.SDKtoAPI").GetTypes().First(t => t.Name == "StringFieldMatchType");
+            var typeObj = Assembly.Load(_AssemblyBase).GetTypes().First(t => t.Name == "StringFieldMatchType");
             FieldInfo[] fields = typeObj.GetFields(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
             fields.ToList().ForEach(t => _MatchType.Items.Add(t.Name.ToLowerFirst()));
 
             //// Date Criteria
-            typeObj = Assembly.Load("STAR.Encompass.SDKtoAPI").GetTypes().First(t => t.Name == "DateFieldCriterion");
+            typeObj = Assembly.Load(_AssemblyBase).GetTypes().First(t => t.Name == "DateFieldCriterion");
             fields = typeObj.GetFields(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
             fields.ToList().ForEach(t => _DateCriteria.Items.Add(t.Name.ToLowerFirst()));
 
             // Ordinal Match Criterion
-            typeObj = Assembly.Load("STAR.Encompass.SDKtoAPI").GetTypes().First(t => t.Name == "OrdinalFieldMatchType");
+            typeObj = Assembly.Load(_AssemblyBase).GetTypes().First(t => t.Name == "OrdinalFieldMatchType");
             fields = typeObj.GetFields(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
             fields.ToList().ForEach(t => _OrdinalMatchType.Items.Add(t.Name.ToLowerFirst()));
 
             // Date Match Precision
-            typeObj = Assembly.Load("STAR.Encompass.SDKtoAPI").GetTypes().First(t => t.Name == "DateFieldMatchPrecision");
+            typeObj = Assembly.Load(_AssemblyBase).GetTypes().First(t => t.Name == "DateFieldMatchPrecision");
             fields = typeObj.GetFields(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static);
             fields.ToList().ForEach(t => _DateMatchPrecision.Items.Add(t.Name.ToLowerFirst()));
 

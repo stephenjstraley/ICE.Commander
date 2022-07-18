@@ -340,7 +340,7 @@ namespace ICE.Commander
 
                         Status.Text = "Get Updated Loan";
                         Status.Refresh();
-                        if (Task.Run(() => newLoan.GetFullLoanAsync()).Result)
+                        if (Task.Run(() => newLoan.LoadLoanAsync()).Result)
                         {
                             var xx = newLoan.Serialize();
                             // compare update

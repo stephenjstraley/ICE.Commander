@@ -34,7 +34,7 @@ namespace ICE.Commander
             GO.Enabled = false;
             UpdateDisplay("");
 
-            _con = _connetions.Where(t => t.Name == "QA").FirstOrDefault();
+            _con = _connetions.Where(t => t.Name == MainWindow.defaultEnvironment).FirstOrDefault();
 
             _api = new LenderAPI(_con.ApiInstance, _con.ApiClientId, _con.ApiUser, _con.ApiPassword, _con.ApiSecret);
 

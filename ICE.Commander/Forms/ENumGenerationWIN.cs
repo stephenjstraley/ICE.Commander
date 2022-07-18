@@ -19,6 +19,7 @@ namespace ICE.Commander
         protected List<ElieConnections> _connetions = new List<ElieConnections>();
         public static ElieConnections _con;
         protected LenderAPI _api;
+        protected string _resourcePath = @"C:\Users\Steve.Straley\source\repos\stephenjstraley\ICE.SDKtoAPI\ICE.SDKtoAPI\Resources";
 
         public ENumGenerationWIN()
         {
@@ -52,8 +53,8 @@ namespace ICE.Commander
                     Output.Clear();
 
                     // Load the dictionaries
-                    var v1File = File.ReadAllText(@"C:\Development_2020\ICE.SDKtoAPI\ICE.SDKtoAPI\Resources\DictionaryFieldsV1.txt");
-                    var v3File = File.ReadAllText(@"C:\Development_2020\ICE.SDKtoAPI\ICE.SDKtoAPI\Resources\DictionaryFieldsV3.txt");
+                    var v1File = File.ReadAllText($@"{_resourcePath}\DictionaryFieldsV1.txt");
+                    var v3File = File.ReadAllText($@"{_resourcePath}\DictionaryFieldsV3.txt");
 
                     Dictionary<string, APISchema> _fieldsV1 = new Dictionary<string, APISchema>(StringComparer.InvariantCultureIgnoreCase);
                     Dictionary<string, APISchema> _dynamicFieldsV1 = new Dictionary<string, APISchema>(StringComparer.InvariantCultureIgnoreCase);
@@ -65,7 +66,7 @@ namespace ICE.Commander
                     var v3Passed = SDKAPIFieldSupport.ParseDictionary(v3File, _fieldsV3, _dynamicFieldsV3);
 
                     // use QA to get schema
-                    _con = _connetions.Where(t => t.Name == "QA").FirstOrDefault();
+                    _con = _connetions.Where(t => t.Name == MainWindow.defaultEnvironment).FirstOrDefault();
 
                     _api = new LenderAPI(_con.ApiInstance, _con.ApiClientId, _con.ApiUser, _con.ApiPassword, _con.ApiSecret);
 

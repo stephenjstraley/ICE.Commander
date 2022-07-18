@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ICE.SDKtoAPI.Helpers;
+using ICE.SDKtoAPI.Contracts;
 
 namespace ICE.Commander
 {
@@ -31,7 +33,7 @@ namespace ICE.Commander
             GO.Enabled = false;
             Output.Clear();
 
-            _con = _connetions.Where(t => t.Name == "QA").FirstOrDefault();
+            _con = _connetions.Where(t => t.Name == MainWindow.defaultEnvironment).FirstOrDefault();
 
             _api = new LenderAPI(_con.ApiInstance, _con.ApiClientId, _con.ApiUser, _con.ApiPassword, _con.ApiSecret);
 
@@ -44,44 +46,65 @@ namespace ICE.Commander
             {
                 UpdateDisplay("Obtaining Loan Guid");
 
-                var guid = Task.Run(() => _api.GetLoanGuidAsync("0550469290")).Result;
+                // get guids and take first one
+                List<string> _fields = new List<string>();
 
-                if (!string.IsNullOrEmpty(guid))
+                _fields.Add("GUID");
+                _fields.Add("Loan.LoanNumber");
+                _fields.Add("Loan.LoanPurpose");  // 299
+                _fields.Add("Loan.BorrowerName");
+
+                var filter = PipelineHelper.GetPipelineTerm("Loan.LoanFolder", "My Pipeline", "exact");
+                var terms = PipelineHelper.GetFilterContract("and", filter);
+                var contract = PipelineHelper.GetContract(terms, _fields.ToArray());
+
+                List<GuidCursor> loans = Task.Run(() => _api.PipelineRequestAsync(contract)).Result;
+
+                if (loans.Count > 0)
                 {
-                    UpdateDisplay("Obtaining Loan");
+                    var guid = loans[0].LoanGuid;
 
-                    var hasLoan = Task.Run(() => _api.GetFullLoanAsync(guid)).Result;
+//                    var guid = Task.Run(() => _api.GetLoanGuidAsync(loan)).Result;
 
-                    if (hasLoan)
+                    if (!string.IsNullOrEmpty(guid))
                     {
-                        UpdateDisplay("Getting Fields");
+                        UpdateDisplay("Obtaining Loan");
 
-                        var fieldIds = Task.Run(() => _api.GetAllFieldIdsAsync()).Result;
-                        NumberOfFields.Text = _api.LastResponse.GetHeaderValue("X-Total-Count");
-                        NumberOfFields.Refresh();
+                        var hasLoan = Task.Run(() => _api.LoadLoanAsync(guid)).Result;
 
-                        foreach (var id in fieldIds)
+                        if (hasLoan)
                         {
-                            try
+                            UpdateDisplay("Getting Fields");
+
+                            var fieldIds = Task.Run(() => _api.GetAllFieldIdsAsync()).Result;
+                            NumberOfFields.Text = _api.LastResponse.GetHeaderValue("X-Total-Count");
+                            NumberOfFields.Refresh();
+
+                            foreach (var id in fieldIds)
                             {
-                                var xx = _api.Fields[id];
-                            }
-                            catch (KeyNotFoundException ex)
-                            {
-                                _notFound.Add(id);
-                                UpdateDisplay($"[{id}] -> Not found in dictionary = [{ex.Message}]");
-                            }
-                            catch (FormatException ex)
-                            {
-                                UpdateDisplay($"[{id}] -> {ex.Message}");
+                                try
+                                {
+                                    var xx = _api.Fields[id];
+                                }
+                                catch (KeyNotFoundException ex)
+                                {
+                                    _notFound.Add(id);
+                                    UpdateDisplay($"[{id}] -> Not found in dictionary = [{ex.Message}]");
+                                }
+                                catch (FormatException ex)
+                                {
+                                    UpdateDisplay($"[{id}] -> {ex.Message}");
+                                }
                             }
                         }
+                        else
+                            UpdateDisplay("Unable to load loan...");
                     }
                     else
-                        UpdateDisplay("Unable to load loan...");
+                        UpdateDisplay("Unable to obtain loan guid");
                 }
                 else
-                    UpdateDisplay("Unable to obtain loan guid");
+                    UpdateDisplay("Unable to query for loan GUID");
             }
 
             Additions.Enabled = _notFound.Count > 0;

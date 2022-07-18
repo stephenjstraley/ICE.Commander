@@ -105,7 +105,7 @@ namespace ICE.Commander
 
                 UpdateStatus("Fully Loading Loan");
 
-                var gotLoan = Task.Run(() => _api.GetFullLoanAsync()).Result;
+                var gotLoan = Task.Run(() => _api.LoadLoanAsync()).Result;
 
                 if (gotLoan)
                 {

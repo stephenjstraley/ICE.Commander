@@ -20,5 +20,7 @@ namespace ICE.Commander
         public string sdkPath { get; set; }
         public string sdkUser { get; set; }
         public string sdkPassword { get; set; }
+        public bool noSDK { get; set; } = false;
+        public string licenseKey { get; set; }
     }
 }

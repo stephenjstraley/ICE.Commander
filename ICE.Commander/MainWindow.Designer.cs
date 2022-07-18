@@ -37,6 +37,7 @@
             this.v3LoanContractsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aPIFieldValidatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eNumGenerationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fieldDefinitionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersGroupsPersonasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allUsersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +62,8 @@
             this.publicTempalteFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allFoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentsAndAttachmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fieldDefinitionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allFieldValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aPIFieldSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,7 +89,8 @@
             this.v3LoanContractsToolStripMenuItem,
             this.aPIFieldValidatorToolStripMenuItem,
             this.eNumGenerationToolStripMenuItem,
-            this.fieldDefinitionListToolStripMenuItem});
+            this.fieldDefinitionListToolStripMenuItem,
+            this.aPIFieldSchemaToolStripMenuItem});
             this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
             this.operationsToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
             this.operationsToolStripMenuItem.Text = "Operations";
@@ -141,6 +144,13 @@
             this.eNumGenerationToolStripMenuItem.Text = "ENum Generation";
             this.eNumGenerationToolStripMenuItem.Click += new System.EventHandler(this.eNumGenerationToolStripMenuItem_Click);
             // 
+            // fieldDefinitionListToolStripMenuItem
+            // 
+            this.fieldDefinitionListToolStripMenuItem.Name = "fieldDefinitionListToolStripMenuItem";
+            this.fieldDefinitionListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fieldDefinitionListToolStripMenuItem.Text = "Field Definition List";
+            this.fieldDefinitionListToolStripMenuItem.Click += new System.EventHandler(this.fieldDefinitionListToolStripMenuItem_Click);
+            // 
             // testsToolStripMenuItem
             // 
             this.testsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -149,7 +159,8 @@
             this.milestonesAssociatesRolesToolStripMenuItem,
             this.locksToolStripMenuItem,
             this.foldersTemplatesToolStripMenuItem,
-            this.documentsAndAttachmentsToolStripMenuItem});
+            this.documentsAndAttachmentsToolStripMenuItem,
+            this.allFieldValuesToolStripMenuItem});
             this.testsToolStripMenuItem.Name = "testsToolStripMenuItem";
             this.testsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.testsToolStripMenuItem.Text = "Tests";
@@ -332,12 +343,19 @@
             this.documentsAndAttachmentsToolStripMenuItem.Text = "Documents and Attachments";
             this.documentsAndAttachmentsToolStripMenuItem.Click += new System.EventHandler(this.documentsAndAttachmentsToolStripMenuItem_Click);
             // 
-            // fieldDefinitionListToolStripMenuItem
+            // allFieldValuesToolStripMenuItem
             // 
-            this.fieldDefinitionListToolStripMenuItem.Name = "fieldDefinitionListToolStripMenuItem";
-            this.fieldDefinitionListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.fieldDefinitionListToolStripMenuItem.Text = "Field Definition List";
-            this.fieldDefinitionListToolStripMenuItem.Click += new System.EventHandler(this.fieldDefinitionListToolStripMenuItem_Click);
+            this.allFieldValuesToolStripMenuItem.Name = "allFieldValuesToolStripMenuItem";
+            this.allFieldValuesToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.allFieldValuesToolStripMenuItem.Text = "All Field Values";
+            this.allFieldValuesToolStripMenuItem.Click += new System.EventHandler(this.allFieldValuesToolStripMenuItem_Click);
+            // 
+            // aPIFieldSchemaToolStripMenuItem
+            // 
+            this.aPIFieldSchemaToolStripMenuItem.Name = "aPIFieldSchemaToolStripMenuItem";
+            this.aPIFieldSchemaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aPIFieldSchemaToolStripMenuItem.Text = "API Field Schema";
+            this.aPIFieldSchemaToolStripMenuItem.Click += new System.EventHandler(this.aPIFieldSchemaToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -347,7 +365,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainWindow";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ICE Commander - 1.0.0";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -392,5 +410,7 @@
         private System.Windows.Forms.ToolStripMenuItem allFoldersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem documentsAndAttachmentsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fieldDefinitionListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allFieldValuesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aPIFieldSchemaToolStripMenuItem;
     }
 }

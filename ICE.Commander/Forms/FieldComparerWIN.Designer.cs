@@ -36,6 +36,11 @@
             this.LoanNumber = new System.Windows.Forms.TextBox();
             this.ListFieldAndValues = new System.Windows.Forms.ListView();
             this.statusUpdate = new System.Windows.Forms.Label();
+            this.excludeEmptyData = new System.Windows.Forms.CheckBox();
+            this.InOneNotOther = new System.Windows.Forms.CheckBox();
+            this.ExportData = new System.Windows.Forms.Button();
+            this.ignorIfBlankSDK = new System.Windows.Forms.CheckBox();
+            this.ExportLoanJson = new System.Windows.Forms.Button();
             label2 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -118,11 +123,69 @@
             this.statusUpdate.TabIndex = 16;
             this.statusUpdate.Text = "STATUS Update";
             // 
+            // excludeEmptyData
+            // 
+            this.excludeEmptyData.AutoSize = true;
+            this.excludeEmptyData.Location = new System.Drawing.Point(664, 12);
+            this.excludeEmptyData.Name = "excludeEmptyData";
+            this.excludeEmptyData.Size = new System.Drawing.Size(122, 17);
+            this.excludeEmptyData.TabIndex = 17;
+            this.excludeEmptyData.Text = "Exclude Empty Data";
+            this.excludeEmptyData.UseVisualStyleBackColor = true;
+            // 
+            // InOneNotOther
+            // 
+            this.InOneNotOther.AutoSize = true;
+            this.InOneNotOther.Location = new System.Drawing.Point(664, 46);
+            this.InOneNotOther.Name = "InOneNotOther";
+            this.InOneNotOther.Size = new System.Drawing.Size(107, 17);
+            this.InOneNotOther.TabIndex = 18;
+            this.InOneNotOther.Text = "In One Not Other";
+            this.InOneNotOther.UseVisualStyleBackColor = true;
+            // 
+            // ExportData
+            // 
+            this.ExportData.Enabled = false;
+            this.ExportData.Location = new System.Drawing.Point(1158, 45);
+            this.ExportData.Name = "ExportData";
+            this.ExportData.Size = new System.Drawing.Size(75, 23);
+            this.ExportData.TabIndex = 19;
+            this.ExportData.Text = "Export";
+            this.ExportData.UseVisualStyleBackColor = true;
+            this.ExportData.Click += new System.EventHandler(this.ExportData_Click);
+            // 
+            // ignorIfBlankSDK
+            // 
+            this.ignorIfBlankSDK.AutoSize = true;
+            this.ignorIfBlankSDK.Location = new System.Drawing.Point(814, 12);
+            this.ignorIfBlankSDK.Name = "ignorIfBlankSDK";
+            this.ignorIfBlankSDK.Size = new System.Drawing.Size(131, 17);
+            this.ignorIfBlankSDK.TabIndex = 20;
+            this.ignorIfBlankSDK.Text = "Ignore if SDK is Empty";
+            this.ignorIfBlankSDK.UseVisualStyleBackColor = true;
+            // 
+            // ExportLoanJson
+            // 
+            this.ExportLoanJson.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.ExportLoanJson.Enabled = false;
+            this.ExportLoanJson.Location = new System.Drawing.Point(1124, 8);
+            this.ExportLoanJson.Name = "ExportLoanJson";
+            this.ExportLoanJson.Size = new System.Drawing.Size(109, 23);
+            this.ExportLoanJson.TabIndex = 21;
+            this.ExportLoanJson.Text = "Export Loan Json";
+            this.ExportLoanJson.UseVisualStyleBackColor = false;
+            this.ExportLoanJson.Click += new System.EventHandler(this.ExportLoanJson_Click);
+            // 
             // FieldComparerWIN
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1245, 701);
+            this.Controls.Add(this.ExportLoanJson);
+            this.Controls.Add(this.ignorIfBlankSDK);
+            this.Controls.Add(this.ExportData);
+            this.Controls.Add(this.InOneNotOther);
+            this.Controls.Add(this.excludeEmptyData);
             this.Controls.Add(this.statusUpdate);
             this.Controls.Add(this.ListFieldAndValues);
             this.Controls.Add(this.ViewPipeline);
@@ -151,5 +214,10 @@
         private System.Windows.Forms.TextBox LoanNumber;
         private System.Windows.Forms.ListView ListFieldAndValues;
         private System.Windows.Forms.Label statusUpdate;
+        private System.Windows.Forms.CheckBox excludeEmptyData;
+        private System.Windows.Forms.CheckBox InOneNotOther;
+        private System.Windows.Forms.Button ExportData;
+        private System.Windows.Forms.CheckBox ignorIfBlankSDK;
+        private System.Windows.Forms.Button ExportLoanJson;
     }
 }

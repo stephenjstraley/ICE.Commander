@@ -1,6 +1,7 @@
 ﻿using EllieMae.Encompass.BusinessObjects.Loans;
 using EllieMae.Encompass.Client;
 using EllieMae.Encompass.Collections;
+using em = EllieMae.Encompass.Licensing;
 using EllieMae.Encompass.Query;
 using ICE.SDKtoAPI;
 using System;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OfficeOpenXml;
 
 namespace ICE.Commander
 {
@@ -26,6 +28,8 @@ namespace ICE.Commander
         protected string _object = string.Empty;
         List<string> _canonicalFields = new List<string>();
 
+        protected bool _withSDK = true;
+
         public FieldComparerWIN()
         {
             new EllieMae.Encompass.Runtime.RuntimeServices().Initialize();
@@ -33,7 +37,7 @@ namespace ICE.Commander
             InitializeComponent();
             LoadInstances();
 
-            LoanNumber.Text = "0550466692";
+            //LoanNumber.Text = "0550466692";
         }
 
         protected void LoadInstances() => _connetions = EncompassConnections.GetConnections();
@@ -82,11 +86,12 @@ namespace ICE.Commander
                 _con = _connetions.Where(t => t.Name == EllieInstance.SelectedItem.ToString()).FirstOrDefault();
                 using (var eb = new LenderAPI(_con.ApiInstance, _con.ApiClientId, _con.ApiUser, _con.ApiPassword, _con.ApiSecret))
                 {
-                    using (var win = new ViewPipelineWINcs(eb))
+                    using (var win = new ViewPipelineWINcs(eb, "Prospects"))
                     {
                         if (win.ShowDialog() == DialogResult.OK)
                         {
                             LoanNumber.Text = win.SelectedLoan;
+                            ExportLoanJson.Enabled = true;
                         }
                     }
                 }
@@ -120,17 +125,29 @@ namespace ICE.Commander
                     if (!string.IsNullOrEmpty(LoanNumber.Text) && EllieInstance.SelectedIndex >= 0)
                     {
                         StatusMsg("SDK Session...");
-                        //                        var temp = new   ManagedSession();
-                        //                        temp.Start(_con.sdkPath, _con.sdkUser, _con.sdkPassword);
-                        //                                                
 
                         Loan sdkLoan = null;
+                        var sdkGuid = string.Empty;
+
+                        Session session = null;
 
                         try
                         {
-                            Session session = new Session();
-                            session.Start(_con.sdkPath, _con.sdkUser, _con.sdkPassword);
-                            var sdkGuid = GetGuidforLoan(session, LoanNumber.Text);
+                            if (_con.noSDK)
+                            {
+                                session = RemoteSession.Connect(_con);
+                            }
+                            else
+                            {
+                                session = new Session();
+                                session.Start(_con.sdkPath, _con.sdkUser, _con.sdkPassword);
+                            }
+
+                            if (session != null)
+                            {
+                                sdkGuid = GetGuidforLoan(session, LoanNumber.Text);
+                            }
+
                             if (string.IsNullOrEmpty(sdkGuid))
                             {
                                 MessageBox.Show("Unable to get GUID");
@@ -143,6 +160,7 @@ namespace ICE.Commander
                         }
                         catch (Exception ee)
                         {
+                            _withSDK = false;
                             MessageBox.Show(ee.Message);
                         }
 
@@ -164,7 +182,7 @@ namespace ICE.Commander
                                 {
                                     StatusMsg("Get V1 Loan... ");
 
-                                    var gotIt = Task.Run(() => _apiV1.GetFullLoanAsync(true)).Result;
+                                    var gotIt = Task.Run(() => _apiV1.SetV1Loan().LoadLoanAsync(true)).Result;
                                     if (gotIt)
                                     {
                                         StatusMsg("V3 Connection");
@@ -179,7 +197,7 @@ namespace ICE.Commander
                                             {
                                                 StatusMsg("Get V3 Loan... ");
 
-                                                gotIt = Task.Run(() => _apiV3.GetFullLoanAsync(_apiV1.LoanGuid, true)).Result;
+                                                gotIt = Task.Run(() => _apiV3.SetV3Loan().LoadLoanAsync(_apiV1.LoanGuid, true)).Result;
 
                                                 if (gotIt)
                                                 {
@@ -191,17 +209,21 @@ namespace ICE.Commander
 
                                                     foreach (var fieldId in fieldIds)
                                                     {
+                                                        StatusMsg($"Processing... {fieldId}");
+
                                                         AddRow(ListFieldAndValues, fieldId, sdkLoan, _apiV1, _apiV3);
                                                     }
 
-                                                    AddRow(ListFieldAndValues, "4000#1", sdkLoan, _apiV1, _apiV3);
-                                                    AddRow(ListFieldAndValues, "4000#2", sdkLoan, _apiV1, _apiV3);
+                                                    //AddRow(ListFieldAndValues, "4000#1", sdkLoan, _apiV1, _apiV3);
+                                                    //AddRow(ListFieldAndValues, "4000#2", sdkLoan, _apiV1, _apiV3);
 
                                                     var customFields = Task.Run(() => _apiV1.GetCustomFieldsAsync()).Result; //_apiV1.GetCustomFieldsAsync().Result;
                                                     foreach (var fieldId in customFields)
                                                     {
                                                         AddRow(ListFieldAndValues, fieldId.Id, sdkLoan, _apiV1, _apiV3);
                                                     }
+
+                                                    ExportData.Enabled = true;
                                                 }
                                             }
                                         }
@@ -231,10 +253,44 @@ namespace ICE.Commander
                     var v3Value = v3.Fields[id]?.ToString();
                     var item = new ListViewItem(id);
 
-                    item.SubItems.Add(v1Value);
-                    item.SubItems.Add(v3Value);
-                    con.Items.Add(item);
+                    if (excludeEmptyData.Checked)
+                    {
+                        if (string.IsNullOrEmpty(v1Value) && string.IsNullOrEmpty(v3Value)) { }
+                        else
+                        {
+                            if (InOneNotOther.Checked)
+                            {
+                                if (string.IsNullOrEmpty(v1Value) && !string.IsNullOrEmpty(v3Value) ||
+                                    !string.IsNullOrEmpty(v1Value) && string.IsNullOrEmpty(v3Value))
+                                {
+                                    item.SubItems.Add(v1Value);
+                                    item.SubItems.Add(v3Value);
+                                    con.Items.Add(item);
+                                }
+                            }
+                            else
+                            {
+                                if (string.IsNullOrEmpty(v1Value) || string.IsNullOrEmpty(v3Value))
+                                {
+                                    item.BackColor = Color.LightGray;
+                                }
+                                else if (v1Value != v3Value)
+                                {
+                                    item.BackColor = Color.LightYellow;
+                                }
 
+                                item.SubItems.Add(v1Value);
+                                item.SubItems.Add(v3Value);
+                                con.Items.Add(item);
+                            }
+                        }
+                    }
+                    else 
+                    {
+                        item.SubItems.Add(v1Value);
+                        item.SubItems.Add(v3Value);
+                        con.Items.Add(item);
+                    }
                 }
                 else
                 {
@@ -245,16 +301,79 @@ namespace ICE.Commander
                     var v3Value = v3.Fields[id]?.ToString();
 
                     var item = new ListViewItem(id);
-                    item.SubItems.Add(v1Value);
-                    item.SubItems.Add(v3Value);
-                    item.SubItems.Add(sdkValue);
-                    con.Items.Add(item);
+
+                    if (ignorIfBlankSDK.Checked)
+                    {
+                        if (string.IsNullOrEmpty(sdkValue) || string.IsNullOrWhiteSpace(sdkValue))
+                        { }
+                        else
+                        {
+                            if (InOneNotOther.Checked)
+                            {
+                                if (CheckThreeEmpty(v1Value, v3Value, sdkValue))
+                                {
+                                    item.BackColor = Color.LightGray;
+
+                                    item.SubItems.Add(v1Value);
+                                    item.SubItems.Add(v3Value);
+                                    item.SubItems.Add(sdkValue);
+                                    con.Items.Add(item);
+                                }
+                            }
+                            else
+                            {
+                                item.SubItems.Add(v1Value);
+                                item.SubItems.Add(v3Value);
+                                item.SubItems.Add(sdkValue);
+                                con.Items.Add(item);
+                            }
+                        }
+                    }
+                    else if (excludeEmptyData.Checked)
+                    {
+                        if (string.IsNullOrEmpty(v1Value) && string.IsNullOrEmpty(v3Value) && string.IsNullOrEmpty(sdkValue)) { }
+                        else
+                        {
+                            if (InOneNotOther.Checked)
+                            {
+                                if (CheckThreeEmpty(v1Value, v3Value, sdkValue))
+                                {
+                                    item.BackColor = Color.LightGray;
+
+                                    item.SubItems.Add(v1Value);
+                                    item.SubItems.Add(v3Value);
+                                    item.SubItems.Add(sdkValue);
+                                    con.Items.Add(item);
+                                }
+                            }
+                            else
+                            {
+                                item.SubItems.Add(v1Value);
+                                item.SubItems.Add(v3Value);
+                                item.SubItems.Add(sdkValue);
+                                con.Items.Add(item);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        item.SubItems.Add(v1Value);
+                        item.SubItems.Add(v3Value);
+                        item.SubItems.Add(sdkValue);
+                        con.Items.Add(item);
+                    }
                 }
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message + $" - {id}");
             }
+        }
+
+        private bool CheckThreeEmpty(string s1, string s2, string s3)
+        {
+            List<string> list = new List<string>() { s1, s2, s3 };
+            return !list.All(s => !string.IsNullOrEmpty(s));
         }
 
         private void StatusMsg(string text)
@@ -286,5 +405,110 @@ namespace ICE.Commander
             return validloan;
         }
 
+        private void ExportData_Click(object sender, EventArgs e)
+        {
+            using (var package = new ExcelPackage())
+            {
+                ExcelWorksheet ws = package.Workbook.Worksheets.Add("Fields");
+
+                ws.TabColor = Color.Blue;
+
+                ListView.ColumnHeaderCollection cols = ListFieldAndValues.Columns;
+                for (int i = 0; i < cols.Count; i++)
+                {
+                    var hdr = cols[i];
+                    ws.Cells[1, i + 1].Value = hdr.Text;
+                    ws.Cells[1, i + 1].Style.Numberformat.Format = "@";
+                    ws.Cells[1, i + 1].AutoFitColumns();
+                }
+
+                int row = 2;
+                int col = 1;
+                foreach (ListViewItem lvi in ListFieldAndValues.Items)
+                {
+                    foreach (ListViewItem.ListViewSubItem lvs in lvi.SubItems)
+                    {
+                        ws.Cells[row, col].Value = lvs.Text;
+                        ws.Cells[row, col].Style.Numberformat.Format = "@";
+                        ws.Cells[row, col].AutoFitColumns();
+
+                        col += 1;
+                    }
+                    col = 1;
+                    row += 1;
+                }
+
+                if (!System.IO.Directory.Exists(@"C:\Temp"))
+                    System.IO.Directory.CreateDirectory(@"C:\Temp");
+
+                var output = $@"C:\Temp\FieldDiffs_{LoanNumber.Text}.xlsx";
+                var info = new System.IO.FileInfo(output);
+                package.SaveAs(info);
+                MessageBox.Show($@"Results exported to {output}");
+            }
+
+        }
+
+        private void ExportLoanJson_Click(object sender, EventArgs e)
+        {
+            var _con = _connetions.Where(t => t.Name == EllieInstance.SelectedItem.ToString()).FirstOrDefault();
+
+            
+            if (!string.IsNullOrEmpty(LoanNumber.Text) && EllieInstance.SelectedIndex >= 0)
+            {
+                StatusMsg("Getting connections...");
+
+                using (var _apiV1 = new LenderAPI(_con.ApiInstance, _con.ApiClientId, _con.ApiUser, _con.ApiPassword, _con.ApiSecret))
+                {
+                    StatusMsg("Getting V1 Token...");
+
+                    var token = Task.Run(() => _apiV1.GetTokenAsync()).Result;
+
+                    if (_apiV1.Token != null)
+                    {
+                        StatusMsg("Getting V1 Loan...");
+
+                        var guid = Task.Run(() => _apiV1.GetLoanGuidAsync(LoanNumber.Text)).Result;
+
+                        if (_apiV1.HasLoanGuid)
+                        {
+                            var v1Loan = Newtonsoft.Json.JsonConvert.SerializeObject(Task.Run(() => _apiV1.SetV1Loan().GetLoanAsync(guid)).Result);
+
+                            using (var _apiV3 = new LenderAPI(_con.ApiInstance, _con.ApiClientId, _con.ApiUser, _con.ApiPassword, _con.ApiSecret))
+                            {
+                                StatusMsg("Getting V3 Token...");
+
+                                token = Task.Run(() => _apiV3.GetTokenAsync()).Result;
+
+                                if (_apiV3.Token != null)
+                                {
+                                    StatusMsg("Getting V3 Loan...");
+
+                                    var v3Loan = Newtonsoft.Json.JsonConvert.SerializeObject(Task.Run(() => _apiV3.SetV3Loan().GetLoanAsync(guid)).Result);
+
+                                    StatusMsg("Saving...");
+
+                                    System.IO.File.WriteAllText($@"C:\Temp\V1_{LoanNumber.Text}.json", v1Loan);
+                                    System.IO.File.WriteAllText($@"C:\Temp\V3_{LoanNumber.Text}.json", v3Loan);
+
+                                    MessageBox.Show("Files Saved!");
+                                    
+                                }
+                                else
+                                    MessageBox.Show("Unable to get V3 token");
+                            }
+                        }
+                        else
+                            MessageBox.Show("Unable to getl loan guid V1");
+                    }
+                    else
+                        MessageBox.Show("Unable to get V1 token");
+                }
+            }
+            else
+                MessageBox.Show("No Connection selected");
+
+            StatusMsg("STATUS...");
+        }
     }
 }

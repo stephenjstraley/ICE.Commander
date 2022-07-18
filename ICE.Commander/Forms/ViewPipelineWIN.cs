@@ -15,15 +15,19 @@ namespace ICE.Commander
 {
     public partial class ViewPipelineWINcs : BaseDetailsWIN
     {
-        public ViewPipelineWINcs(LenderAPI api) : base (api)
+        protected string _folder = string.Empty;
+
+        public ViewPipelineWINcs(LenderAPI api, string folder = "My Pipeline") : base (api)
         {
-            Text = "View My Pipeline ";
+            _folder = folder;
+            Text = $"View {_folder}";
         }
 
         protected override void BaseDetailsWIN_Load(object sender, EventArgs e)
         {
             QueryFields.Columns.Add("GUID");
             QueryFields.Columns.Add("Loan Number");
+            QueryFields.Columns.Add("Loan Folder");
             QueryFields.Columns.Add("Purpose");
             QueryFields.Columns.Add("Borrower");
             QueryFields.Columns.Add("Status");
@@ -48,6 +52,7 @@ namespace ICE.Commander
 
                 _fields.Add("GUID");
                 _fields.Add("Loan.LoanNumber");
+                _fields.Add("Loan.LoanFolder");
                 _fields.Add("Loan.LoanPurpose");  // 299
                 _fields.Add("Loan.BorrowerName");
                 _fields.Add("Fields.CX.STATUS");
@@ -61,7 +66,7 @@ namespace ICE.Commander
                 //_fields.Add("Loan.LockRequestedDate");
 
                 //var cur = _baseConnection.GetPipelineCursor();
-                var filter = PipelineHelper.GetPipelineTerm("Loan.LoanFolder", "My Pipeline", "exact");
+                var filter = PipelineHelper.GetPipelineTerm("Loan.LoanFolder", _folder, "exact");
                 var terms = PipelineHelper.GetFilterContract("and", filter);
                 var contract = PipelineHelper.GetContract(terms, _fields.ToArray());
 
