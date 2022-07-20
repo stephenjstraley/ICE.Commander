@@ -255,5 +255,13 @@ namespace ICE.Commander
             }
             Cursor.Current = Cursors.Default;
         }
+
+        private void specificV3FieldsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Form win = new FieldValuesWIN())
+            {
+                win.ShowDialog();
+            }
+        }
     }
 }

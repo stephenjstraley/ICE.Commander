@@ -30,6 +30,7 @@
         {
             System.Windows.Forms.Label label2;
             System.Windows.Forms.Label label1;
+            System.Windows.Forms.Label label3;
             this.ViewPipeline = new System.Windows.Forms.Button();
             this.LoadLoan = new System.Windows.Forms.Button();
             this.EllieInstance = new System.Windows.Forms.ComboBox();
@@ -41,8 +42,10 @@
             this.ExportData = new System.Windows.Forms.Button();
             this.ignorIfBlankSDK = new System.Windows.Forms.CheckBox();
             this.ExportLoanJson = new System.Windows.Forms.Button();
+            this.encompassFolders = new System.Windows.Forms.ComboBox();
             label2 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label2
@@ -57,15 +60,24 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(340, 21);
+            label1.Location = new System.Drawing.Point(610, 18);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(71, 13);
             label1.TabIndex = 9;
             label1.Text = "Loan Number";
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new System.Drawing.Point(312, 20);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(36, 13);
+            label3.TabIndex = 22;
+            label3.Text = "Folder";
+            // 
             // ViewPipeline
             // 
-            this.ViewPipeline.Location = new System.Drawing.Point(304, 16);
+            this.ViewPipeline.Location = new System.Drawing.Point(563, 15);
             this.ViewPipeline.Name = "ViewPipeline";
             this.ViewPipeline.Size = new System.Drawing.Size(26, 23);
             this.ViewPipeline.TabIndex = 14;
@@ -75,7 +87,7 @@
             // 
             // LoadLoan
             // 
-            this.LoadLoan.Location = new System.Drawing.Point(550, 15);
+            this.LoadLoan.Location = new System.Drawing.Point(819, 12);
             this.LoadLoan.Name = "LoadLoan";
             this.LoadLoan.Size = new System.Drawing.Size(75, 23);
             this.LoadLoan.TabIndex = 13;
@@ -94,7 +106,7 @@
             // 
             // LoanNumber
             // 
-            this.LoanNumber.Location = new System.Drawing.Point(417, 18);
+            this.LoanNumber.Location = new System.Drawing.Point(686, 15);
             this.LoanNumber.Name = "LoanNumber";
             this.LoanNumber.Size = new System.Drawing.Size(113, 20);
             this.LoanNumber.TabIndex = 10;
@@ -105,9 +117,9 @@
             this.ListFieldAndValues.FullRowSelect = true;
             this.ListFieldAndValues.GridLines = true;
             this.ListFieldAndValues.HideSelection = false;
-            this.ListFieldAndValues.Location = new System.Drawing.Point(0, 79);
+            this.ListFieldAndValues.Location = new System.Drawing.Point(0, 101);
             this.ListFieldAndValues.Name = "ListFieldAndValues";
-            this.ListFieldAndValues.Size = new System.Drawing.Size(1245, 622);
+            this.ListFieldAndValues.Size = new System.Drawing.Size(1245, 600);
             this.ListFieldAndValues.TabIndex = 15;
             this.ListFieldAndValues.UseCompatibleStateImageBehavior = false;
             this.ListFieldAndValues.View = System.Windows.Forms.View.Details;
@@ -126,7 +138,7 @@
             // excludeEmptyData
             // 
             this.excludeEmptyData.AutoSize = true;
-            this.excludeEmptyData.Location = new System.Drawing.Point(664, 12);
+            this.excludeEmptyData.Location = new System.Drawing.Point(354, 45);
             this.excludeEmptyData.Name = "excludeEmptyData";
             this.excludeEmptyData.Size = new System.Drawing.Size(122, 17);
             this.excludeEmptyData.TabIndex = 17;
@@ -136,7 +148,7 @@
             // InOneNotOther
             // 
             this.InOneNotOther.AutoSize = true;
-            this.InOneNotOther.Location = new System.Drawing.Point(664, 46);
+            this.InOneNotOther.Location = new System.Drawing.Point(354, 68);
             this.InOneNotOther.Name = "InOneNotOther";
             this.InOneNotOther.Size = new System.Drawing.Size(107, 17);
             this.InOneNotOther.TabIndex = 18;
@@ -146,7 +158,7 @@
             // ExportData
             // 
             this.ExportData.Enabled = false;
-            this.ExportData.Location = new System.Drawing.Point(1158, 45);
+            this.ExportData.Location = new System.Drawing.Point(1160, 64);
             this.ExportData.Name = "ExportData";
             this.ExportData.Size = new System.Drawing.Size(75, 23);
             this.ExportData.TabIndex = 19;
@@ -157,7 +169,7 @@
             // ignorIfBlankSDK
             // 
             this.ignorIfBlankSDK.AutoSize = true;
-            this.ignorIfBlankSDK.Location = new System.Drawing.Point(814, 12);
+            this.ignorIfBlankSDK.Location = new System.Drawing.Point(504, 45);
             this.ignorIfBlankSDK.Name = "ignorIfBlankSDK";
             this.ignorIfBlankSDK.Size = new System.Drawing.Size(131, 17);
             this.ignorIfBlankSDK.TabIndex = 20;
@@ -176,11 +188,21 @@
             this.ExportLoanJson.UseVisualStyleBackColor = false;
             this.ExportLoanJson.Click += new System.EventHandler(this.ExportLoanJson_Click);
             // 
+            // encompassFolders
+            // 
+            this.encompassFolders.FormattingEnabled = true;
+            this.encompassFolders.Location = new System.Drawing.Point(354, 16);
+            this.encompassFolders.Name = "encompassFolders";
+            this.encompassFolders.Size = new System.Drawing.Size(204, 21);
+            this.encompassFolders.TabIndex = 23;
+            // 
             // FieldComparerWIN
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1245, 701);
+            this.Controls.Add(this.encompassFolders);
+            this.Controls.Add(label3);
             this.Controls.Add(this.ExportLoanJson);
             this.Controls.Add(this.ignorIfBlankSDK);
             this.Controls.Add(this.ExportData);
@@ -219,5 +241,6 @@
         private System.Windows.Forms.Button ExportData;
         private System.Windows.Forms.CheckBox ignorIfBlankSDK;
         private System.Windows.Forms.Button ExportLoanJson;
+        private System.Windows.Forms.ComboBox encompassFolders;
     }
 }

@@ -63,6 +63,14 @@ namespace ICE.Commander
                             MessageBox.Show("Unable to get access token for selected instance");
                             EllieInstance.SelectedIndex = -1;
                         }
+                        else // Load loan folders
+                        {
+                            var folders = Task.Run(() => _api.GetLoanFoldersAsync()).Result;
+                            if (folders != null)
+                            {
+                                folders.ForEach(t => encompassFolders.Items.Add(t.FolderName));
+                            }
+                        }
                     }
                     else
                     {
@@ -86,7 +94,7 @@ namespace ICE.Commander
                 _con = _connetions.Where(t => t.Name == EllieInstance.SelectedItem.ToString()).FirstOrDefault();
                 using (var eb = new LenderAPI(_con.ApiInstance, _con.ApiClientId, _con.ApiUser, _con.ApiPassword, _con.ApiSecret))
                 {
-                    using (var win = new ViewPipelineWINcs(eb, "Prospects"))
+                    using (var win = new ViewPipelineWINcs(eb, string.IsNullOrEmpty(encompassFolders.Text) ? "Prospects" : encompassFolders.Text))
                     {
                         if (win.ShowDialog() == DialogResult.OK)
                         {
@@ -225,11 +233,19 @@ namespace ICE.Commander
 
                                                     ExportData.Enabled = true;
                                                 }
+                                                else
+                                                    MessageBox.Show("Unable to get field IDS");
                                             }
                                         }
                                     }
+                                    else
+                                        MessageBox.Show("Unable to get V1 Loan");
                                 }
+                                else
+                                    MessageBox.Show("Unable to get V1 Guid");
                             }
+                            else
+                                MessageBox.Show("Unable to get V1 Token");
                         }
                     }
                 }

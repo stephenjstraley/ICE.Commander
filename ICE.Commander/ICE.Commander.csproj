@@ -229,6 +229,12 @@
     <Compile Include="Forms\FieldUpdaterWIN.Designer.cs">
       <DependentUpon>FieldUpdaterWIN.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FieldValuesWIN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FieldValuesWIN.Designer.cs">
+      <DependentUpon>FieldValuesWIN.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\GenerateV3ClassesWIN.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -389,6 +395,9 @@
     <EmbeddedResource Include="Forms\FieldUpdaterWIN.resx">
       <DependentUpon>FieldUpdaterWIN.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FieldValuesWIN.resx">
+      <DependentUpon>FieldValuesWIN.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenerateV3ClassesWIN.resx">
       <DependentUpon>GenerateV3ClassesWIN.cs</DependentUpon>
     </EmbeddedResource>
@@ -458,11 +467,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ICE.SDKtoAPI\ICE.SDKtoAPI\ICE.SDKtoAPI.csproj">
-      <Project>{bc74d4c1-ffd8-489c-acc1-7ba1fdb8fefc}</Project>
+      <Project>{a7fe4908-4750-4a56-8c27-1d419ee2e471}</Project>
       <Name>ICE.SDKtoAPI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets" Condition="Exists('..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -38,6 +38,7 @@
             this.aPIFieldValidatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eNumGenerationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fieldDefinitionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aPIFieldSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersGroupsPersonasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allUsersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +64,7 @@
             this.allFoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentsAndAttachmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allFieldValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aPIFieldSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.specificV3FieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -151,6 +152,13 @@
             this.fieldDefinitionListToolStripMenuItem.Text = "Field Definition List";
             this.fieldDefinitionListToolStripMenuItem.Click += new System.EventHandler(this.fieldDefinitionListToolStripMenuItem_Click);
             // 
+            // aPIFieldSchemaToolStripMenuItem
+            // 
+            this.aPIFieldSchemaToolStripMenuItem.Name = "aPIFieldSchemaToolStripMenuItem";
+            this.aPIFieldSchemaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aPIFieldSchemaToolStripMenuItem.Text = "API Field Schema";
+            this.aPIFieldSchemaToolStripMenuItem.Click += new System.EventHandler(this.aPIFieldSchemaToolStripMenuItem_Click);
+            // 
             // testsToolStripMenuItem
             // 
             this.testsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -160,7 +168,8 @@
             this.locksToolStripMenuItem,
             this.foldersTemplatesToolStripMenuItem,
             this.documentsAndAttachmentsToolStripMenuItem,
-            this.allFieldValuesToolStripMenuItem});
+            this.allFieldValuesToolStripMenuItem,
+            this.specificV3FieldsToolStripMenuItem});
             this.testsToolStripMenuItem.Name = "testsToolStripMenuItem";
             this.testsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.testsToolStripMenuItem.Text = "Tests";
@@ -350,12 +359,12 @@
             this.allFieldValuesToolStripMenuItem.Text = "All Field Values";
             this.allFieldValuesToolStripMenuItem.Click += new System.EventHandler(this.allFieldValuesToolStripMenuItem_Click);
             // 
-            // aPIFieldSchemaToolStripMenuItem
+            // specificV3FieldsToolStripMenuItem
             // 
-            this.aPIFieldSchemaToolStripMenuItem.Name = "aPIFieldSchemaToolStripMenuItem";
-            this.aPIFieldSchemaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.aPIFieldSchemaToolStripMenuItem.Text = "API Field Schema";
-            this.aPIFieldSchemaToolStripMenuItem.Click += new System.EventHandler(this.aPIFieldSchemaToolStripMenuItem_Click);
+            this.specificV3FieldsToolStripMenuItem.Name = "specificV3FieldsToolStripMenuItem";
+            this.specificV3FieldsToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.specificV3FieldsToolStripMenuItem.Text = "Specific Fields";
+            this.specificV3FieldsToolStripMenuItem.Click += new System.EventHandler(this.specificV3FieldsToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -412,5 +421,6 @@
         private System.Windows.Forms.ToolStripMenuItem fieldDefinitionListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allFieldValuesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aPIFieldSchemaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem specificV3FieldsToolStripMenuItem;
     }
 }
